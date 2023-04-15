@@ -247,9 +247,41 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class ShoeSizeDropdown extends StatefulWidget {
+  @override
+  _ShoeSizeDropdownState createState() => _ShoeSizeDropdownState();
+}
+
+class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
+  final List<String> shoeSizes = ['36', '37', '38', '39', '40', '41', '42'];
+  String? _selectedSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      hint: Text('Select shoe size'),
+      value: _selectedSize,
+      onChanged: (String? newValue) {
+        setState(() {
+          _selectedSize = newValue;
+        });
+      },
+      items: shoeSizes.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+}
+
+
+
 class ShoeDetailPage extends StatelessWidget {
   final Shoe shoe;
   final Cart cart;
+
 
   ShoeDetailPage({required this.shoe, required this.cart});
 
@@ -288,6 +320,11 @@ class ShoeDetailPage extends StatelessWidget {
               padding: EdgeInsets.all(16),
               child: Text(shoe.description),
             ),
+            Padding(
+  padding: EdgeInsets.symmetric(horizontal: 16),
+  child: ShoeSizeDropdown(),
+),
+
             Padding(
               padding: EdgeInsets.all(16),
               child: ElevatedButton(
