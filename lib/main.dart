@@ -139,7 +139,14 @@ class _HomePageState extends State<HomePage> {
     // Add more shoes as needed
   ];
   Cart cart = Cart();
+  
+  int _selectedIndex = 0;
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -183,6 +190,7 @@ class _HomePageState extends State<HomePage> {
           childAspectRatio: 0.6,
         ),
         itemBuilder: (BuildContext context, int index) {
+          
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -193,7 +201,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             },
-            child: Card(
+            
+            child: Stack(
+
+            children: [
+              Card(
               elevation: 5,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
@@ -203,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: ClipRRect(
                       borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(15)),
+                          const BorderRadius.vertical(top: Radius.circular(15)),
                       child: Image.asset(
                         shoes[index].imageUrl,
                         fit: BoxFit.contain,
@@ -225,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                     padding:
-                        EdgeInsets.fromLTRB(8, 0, 8, 16), // Add bottom margin
+                        const EdgeInsets.fromLTRB(8, 0, 8, 16), // Add bottom margin
                     child: Text(
                       '\$${shoes[index].price.toStringAsFixed(2)}',
                       style: TextStyle(
@@ -240,12 +252,86 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            Positioned(
+        top: 8,
+        right: 8,
+        child: IconButton(
+          icon: Icon(Icons.favorite_border),
+          onPressed: () {
+            // Add functionality for adding to favorites
+          },
+        ),
+      ),
+            ],
+            ),
           );
         },
+      ),
+       bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.black,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+  
+}
+class ShoeCard extends StatefulWidget {
+  final Shoe shoe;
+
+  const ShoeCard({Key? key, required this.shoe}) : super(key: key);
+
+  @override
+  _ShoeCardState createState() => _ShoeCardState();
+}
+
+class _ShoeCardState extends State<ShoeCard> {
+  bool _isFavorite = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Your existing onTap code
+      },
+      child: Stack(
+        children: [
+          // Your existing Card widget code
+          Positioned(
+            top: 8,
+            right: 8,
+            child: IconButton(
+              icon: Icon(
+                _isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: _isFavorite ? Colors.red : null,
+              ),
+              onPressed: () {
+                setState(() {
+                  _isFavorite = !_isFavorite;
+                });
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
 
 class ShoeSizeDropdown extends StatefulWidget {
   @override
