@@ -106,6 +106,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 }
 
 class HomePage extends StatefulWidget {
+  
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -143,10 +144,28 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  setState(() {
+    _selectedIndex = index;
+  });
+  switch (index) {
+    case 0:
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FavoritesPage()),
+      );
+      break;
+    case 1:
+      Navigator.popUntil(context, (route) => route.isFirst);
+      break;
+    case 2:
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+      break;
   }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,82 +209,10 @@ class _HomePageState extends State<HomePage> {
           childAspectRatio: 0.6,
         ),
         itemBuilder: (BuildContext context, int index) {
-          
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      ShoeDetailPage(shoe: shoes[index], cart: cart),
-                ),
-              );
-            },
-            
-            child: Stack(
+  return ShoeCard(shoe: shoes[index], cart: cart);
+},
 
-            children: [
-              Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(15)),
-                      child: Image.asset(
-                        shoes[index].imageUrl,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Text(
-                      shoes[index].name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontFamily:
-                            'Sans', // Specify the sans-serif font family
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.fromLTRB(8, 0, 8, 16), // Add bottom margin
-                    child: Text(
-                      '\$${shoes[index].price.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Colors.black, // Change the color to black
-                        fontFamily:
-                            'Sans', // Specify the sans-serif font family
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-        top: 8,
-        right: 8,
-        child: IconButton(
-          icon: Icon(Icons.favorite_border),
-          onPressed: () {
-            // Add functionality for adding to favorites
-          },
-        ),
-      ),
-            ],
-            ),
-          );
-        },
+    
       ),
        bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -288,12 +235,14 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  
+ 
+ 
 }
 class ShoeCard extends StatefulWidget {
   final Shoe shoe;
+    final Cart cart;
 
-  const ShoeCard({Key? key, required this.shoe}) : super(key: key);
+  const ShoeCard({Key? key, required this.shoe, required this.cart}) : super(key: key);
 
   @override
   _ShoeCardState createState() => _ShoeCardState();
@@ -306,11 +255,57 @@ class _ShoeCardState extends State<ShoeCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Your existing onTap code
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ShoeDetailPage(shoe: widget.shoe, cart: widget.cart),
+          ),
+        );
       },
       child: Stack(
         children: [
-          // Your existing Card widget code
+          Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                    child: Image.asset(
+                      widget.shoe.imageUrl, // Replace shoes[index] with widget.shoe
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    widget.shoe.name, // Replace shoes[index] with widget.shoe
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontFamily: 'Sans',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+                  child: Text(
+                    '\$${widget.shoe.price.toStringAsFixed(2)}', // Replace shoes[index] with widget.shoe
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontFamily: 'Sans',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Positioned(
             top: 8,
             right: 8,
@@ -331,6 +326,7 @@ class _ShoeCardState extends State<ShoeCard> {
     );
   }
 }
+
 
 
 class ShoeSizeDropdown extends StatefulWidget {
@@ -581,6 +577,137 @@ class _SearchPageState extends State<SearchPage> {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+
+//THIS IS FOR FAVORITE PAGE
+class Favorites {
+  List<Shoe> favoriteShoes = [];
+
+  void add(Shoe shoe) {
+    favoriteShoes.add(shoe);
+  }
+
+  void remove(Shoe shoe) {
+    favoriteShoes.remove(shoe);
+  }
+}
+class FavoritesPage extends StatefulWidget {
+  @override
+  _FavoritesPageState createState() => _FavoritesPageState();
+}
+
+class _FavoritesPageState extends State<FavoritesPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Favorites'),
+      ),
+      body: Center(
+        child: Text('Favorites Page'),
+      ),
+    );
+  }
+}
+
+
+//THIS IS PROFILE PAGE
+
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _locationController = TextEditingController();
+
+  bool _isEditing = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text('Profile'),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 60,
+                backgroundImage: AssetImage('profile.JPG'),
+              ),
+              SizedBox(height: 40),
+              Text(
+                'Name',
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  hintText: 'John Doe',
+                  enabled: _isEditing,
+                ),
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Email',
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  hintText: 'john.doe@example.com',
+                  enabled: _isEditing,
+                ),
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Location',
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              TextField(
+                controller: _locationController,
+                decoration: InputDecoration(
+                  hintText: 'San Francisco, CA',
+                  enabled: _isEditing,
+                ),
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
+              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isEditing = !_isEditing;
+                      });
+                    },
+                    child: Text(
+                      _isEditing ? 'Save' : 'Edit',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
