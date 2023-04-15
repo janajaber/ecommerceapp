@@ -7,7 +7,11 @@ class Shoe {
   final String imageUrl;
   final double price;
 
-  Shoe({required this.name, required this.description, required this.imageUrl, required this.price});
+  Shoe(
+      {required this.name,
+      required this.description,
+      required this.imageUrl,
+      required this.price});
 }
 
 class Cart {
@@ -21,5 +25,10 @@ class Cart {
 
   void removeItem(Shoe shoe) {
     _items.remove(shoe);
+  }
+
+  // Add totalPrice getter
+  double get totalPrice {
+    return _items.fold(0, (double sum, Shoe shoe) => sum + shoe.price);
   }
 }

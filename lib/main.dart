@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:test/auth_wrapper.dart';
+import 'payment.dart';
 
 import 'choose.dart';
 import 'models.dart';
@@ -18,14 +18,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shoe Shopping App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.black,
+        inputDecorationTheme: InputDecorationTheme(
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.white), // Change underline color to black
+          ),
+        ),
       ),
-        debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
 
       home: WelcomeScreen(), // Use AuthWrapper as the home screen
     );
   }
 }
+
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -59,71 +66,76 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             fit: BoxFit.cover,
           ),
         ),
-          
-
-
-  child: Column(
-    children: [
-      Padding(
-        padding: EdgeInsets.only(top: 100),
-        child: Center(
-          child: Stack(
-            children: [
-              // Add blue text with stroke
-              Text(
-                'Shoes',
-                style: TextStyle(
-                  fontFamily: 'OPTICoyonet',
-                  fontSize: 100,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 7
-                    ..color = Color.fromARGB(255, 0, 107, 194),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 100),
+              child: Center(
+                child: Stack(
+                  children: [
+                    // Add blue text with stroke
+                    Text(
+                      'Shoes',
+                      style: TextStyle(
+                        fontFamily: 'OPTICoyonet',
+                        fontSize: 100,
+                        foreground: Paint()
+                          ..style = PaintingStyle.stroke
+                          ..strokeWidth = 7
+                          ..color = Color.fromARGB(255, 0, 107, 194),
+                      ),
+                    ),
+                    // Add white text
+                    const Text(
+                      'Shoes',
+                      style: TextStyle(
+                        fontFamily: 'OPTICoyonet',
+                        fontSize: 100,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              // Add white text
-              const Text(
-                'Shoes',
-                style: TextStyle(
-                  fontFamily: 'OPTICoyonet',
-                  fontSize: 100,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
-    ],
-  ),
-
       ),
     );
   }
 }
 
-
 class HomePage extends StatefulWidget {
-  
   @override
   _HomePageState createState() => _HomePageState();
-  
 }
 
 class _HomePageState extends State<HomePage> {
   List<Shoe> shoes = [
     Shoe(
-      name: 'Example Shoe 1',
+      name: 'Air Yeezy',
       description: 'This is an example shoe with great comfort and style.',
-      imageUrl: 'im1.png',
+      imageUrl: 'im2.jpeg',
       price: 59.99,
     ),
     Shoe(
-      name: 'Example Shoe 2',
+      name: 'Nike Air Presto',
       description: 'This is another example shoe with amazing durability.',
-      imageUrl: 'im2.jpeg',
+      imageUrl: 'im6.jpeg',
       price: 89.99,
     ),
+    Shoe(
+      name: 'Cortez to Air Force 1',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im4.jpeg',
+      price: 89.99,
+    ),
+    Shoe(
+      name: 'Nike Dunk High',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im5.jpeg',
+      price: 89.99,
+    )
     // Add more shoes as needed
   ];
   Cart cart = Cart();
@@ -132,18 +144,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text('Shoe Shop'),
         actions: [
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
               Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SearchPage(shoes: shoes),
-          ),
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchPage(shoes: shoes),
+                ),
               );
-
             },
           ),
           IconButton(
@@ -161,55 +173,76 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body:GridView.builder(
-  padding: EdgeInsets.all(8),
-  itemCount: shoes.length,
-  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2,
-    crossAxisSpacing: 8,
-    mainAxisSpacing: 8,
-    childAspectRatio: 0.6,
-  ),
-  itemBuilder: (BuildContext context, int index) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ShoeDetailPage(shoe: shoes[index], cart: cart),
-          ),
-        );
-      },
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
-                child: Image.asset(
-                  shoes[index].imageUrl,
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                shoes[index].name,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text('\$${shoes[index].price.toStringAsFixed(2)}'),
-            ),
-          ],
+      body: GridView.builder(
+        padding: EdgeInsets.all(8),
+        itemCount: shoes.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 0.6,
         ),
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ShoeDetailPage(shoe: shoes[index], cart: cart),
+                ),
+              );
+            },
+            child: Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(15)),
+                      child: Image.asset(
+                        shoes[index].imageUrl,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text(
+                      shoes[index].name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontFamily:
+                            'Sans', // Specify the sans-serif font family
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.fromLTRB(8, 0, 8, 16), // Add bottom margin
+                    child: Text(
+                      '\$${shoes[index].price.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Colors.black, // Change the color to black
+                        fontFamily:
+                            'Sans', // Specify the sans-serif font family
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
-    );
-  },
-),
     );
   }
 }
@@ -220,22 +253,24 @@ class ShoeDetailPage extends StatelessWidget {
 
   ShoeDetailPage({required this.shoe, required this.cart});
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text(shoe.name),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.asset( // Replace Image.network with Image.asset
+            Image.asset(
+              // Replace Image.network with Image.asset
               shoe.imageUrl,
               fit: BoxFit.cover,
               height: 300,
             ),
-          Padding(
+            Padding(
               padding: EdgeInsets.all(16),
               child: Text(
                 shoe.name,
@@ -265,6 +300,8 @@ class ShoeDetailPage extends StatelessWidget {
                     ),
                   );
                 },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
                   child: Text(
@@ -295,40 +332,70 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text('Your Cart'),
       ),
-      body: ListView.builder(
-        itemCount: widget.cart.items.length,
-        itemBuilder: (BuildContext context, int index) {
-          Shoe shoe = widget.cart.items[index];
-          return ListTile(
-            leading: Image.asset( // Replace Image.network with Image.asset
-              shoe.imageUrl,
-              height: 50,
-              width: 50,
-            ),
-            title: Text(shoe.name),
-            subtitle: Text('\$${shoe.price.toStringAsFixed(2)}'),
-            trailing: IconButton(
-              icon: Icon(Icons.remove_shopping_cart),
-              onPressed: () {
-                setState(() {
-                  widget.cart.removeItem(shoe);
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Removed from cart!'),
-                    duration: Duration(seconds: 2),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.cart.items.length,
+              itemBuilder: (BuildContext context, int index) {
+                Shoe shoe = widget.cart.items[index];
+                return ListTile(
+                  leading: Image.asset(
+                    shoe.imageUrl,
+                    height: 50,
+                    width: 50,
+                  ),
+                  title: Text(shoe.name),
+                  subtitle: Text('\$${shoe.price.toStringAsFixed(2)}'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.remove_shopping_cart),
+                    onPressed: () {
+                      setState(() {
+                        widget.cart.removeItem(shoe);
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Removed from cart!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
             ),
-          );
-        },
+          ),
+          Container(
+            padding: EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentPage(cart: widget.cart),
+                  ),
+                );
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black)),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  'Confirm Order',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
 class SearchPage extends StatefulWidget {
   final List<Shoe> shoes;
 
@@ -356,10 +423,16 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: TextField(
+          cursorColor: Colors.white,
           controller: _searchController,
+          style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Search shoes...',
+            hintStyle: TextStyle(color: Colors.white),
+            filled: true,
+            fillColor: Colors.black,
           ),
           onChanged: (value) {
             _searchShoes(value);
@@ -378,7 +451,8 @@ class _SearchPageState extends State<SearchPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ShoeDetailPage(shoe: shoe, cart: Cart()),
+                  builder: (context) =>
+                      ShoeDetailPage(shoe: shoe, cart: Cart()),
                 ),
               );
             },
