@@ -8,15 +8,15 @@ import 'main.dart';
 
 //import 'package:test/signup.dart';
 class SignInPage extends StatefulWidget {
-  
   final VoidCallback toggleView;
 
-  SignInPage({required this.toggleView});  
+  SignInPage({required this.toggleView});
 
   @override
   // ignore: no_logic_in_create_state
   State<SignInPage> createState() => _SignInPageState();
 }
+
 class _SignInPageState extends State<SignInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -54,8 +54,7 @@ class _SignInPageState extends State<SignInPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                          height: 130,
-                          child: Image.asset('logo2.png')),
+                          height: 130, child: Image.asset('logo2.png')),
                     ),
                     const Padding(padding: EdgeInsets.only(top: 16.0)),
                   ],
@@ -83,7 +82,7 @@ class _SignInPageState extends State<SignInPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15.0),
                           border: Border.all(
-                            color: const Color.fromARGB(255, 13, 120, 220),
+                            color: const Color.fromARGB(255, 0, 0, 0),
                             width: 2.0,
                           ),
                         ),
@@ -94,6 +93,7 @@ class _SignInPageState extends State<SignInPage> {
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
+                          cursorColor: Colors.black,
                         ),
                       ),
                     ),
@@ -115,7 +115,7 @@ class _SignInPageState extends State<SignInPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15.0),
                           border: Border.all(
-                            color: const Color.fromARGB(255, 13, 120, 220),
+                            color: const Color.fromARGB(255, 0, 0, 0),
                             width: 2.0,
                           ),
                         ),
@@ -126,6 +126,7 @@ class _SignInPageState extends State<SignInPage> {
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
+                          cursorColor: Colors.black,
                           obscureText: true,
                         ),
                       ),
@@ -141,11 +142,13 @@ class _SignInPageState extends State<SignInPage> {
                     horizontal: 100.0, vertical: 10.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
-                  color: const Color.fromARGB(255, 13, 120, 220),
+                  color: const Color.fromARGB(255, 0, 0, 0),
                 ),
                 child: TextButton(
-                  onPressed: ()  { Navigator.of(context).pushReplacement(PageRouteBuilder(
-                        pageBuilder: (BuildContext context, _, __) => HomePage()));
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(PageRouteBuilder(
+                        pageBuilder: (BuildContext context, _, __) =>
+                            HomePage()));
                     //widget.toggleView();},
                   },
                   child: const Text(
@@ -185,14 +188,19 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                 ],
               ),
-              InkWell(onTap: () {/*widget.toggleView();*/
-              }, 
-              child: const buttonCustomGoogle()),
+              InkWell(
+                  onTap: () {
+                    /*widget.toggleView();*/
+                  },
+                  child: const buttonCustomGoogle()),
               Center(
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).pushReplacement(PageRouteBuilder(
-                        pageBuilder: (BuildContext context, _, __) => SignUpPage(toggleView: () {  },)));
+                        pageBuilder: (BuildContext context, _, __) =>
+                            SignUpPage(
+                              toggleView: () {},
+                            )));
                   },
                   child: const Text(
                     "Do Not have account? Sign up!",
@@ -225,7 +233,7 @@ class buttonCustomGoogle extends StatelessWidget {
         height: 49.0,
         width: 500.0,
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 13, 120, 220),
+          color: const Color.fromARGB(255, 0, 0, 0),
           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10.0)],
           borderRadius: BorderRadius.circular(40.0),
         ),

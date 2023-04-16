@@ -43,8 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                          height: 130,
-                          child: Image.asset('logo2.png')),
+                          height: 130, child: Image.asset('logo2.png')),
                     ),
                     const Padding(padding: EdgeInsets.only(top: 16.0)),
                   ],
@@ -73,7 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15.0),
                           border: Border.all(
-                            color: const Color.fromARGB(255, 13, 120, 220),
+                            color: const Color.fromARGB(255, 0, 0, 0),
                             width: 2.0,
                           ),
                         ),
@@ -84,6 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
+                          cursorColor: Colors.black,
                         ),
                       ),
                     ),
@@ -105,7 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15.0),
                           border: Border.all(
-                            color: const Color.fromARGB(255, 13, 120, 220),
+                            color: const Color.fromARGB(255, 0, 0, 0),
                             width: 2.0,
                           ),
                         ),
@@ -116,6 +116,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
+                          cursorColor: Colors.black,
                           obscureText: true,
                         ),
                       ),
@@ -138,7 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15.0),
                           border: Border.all(
-                            color: const Color.fromARGB(255, 13, 120, 220),
+                            color: const Color.fromARGB(255, 0, 0, 0),
                             width: 2.0,
                           ),
                         ),
@@ -149,6 +150,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
+                          cursorColor: Colors.black,
                           obscureText: true,
                         ),
                       ),
@@ -165,15 +167,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     horizontal: 100.0, vertical: 10.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
-                  color: const Color.fromARGB(255, 13, 120, 220),
+                  color: const Color.fromARGB(255, 0, 0, 0),
                 ),
                 child: TextButton(
                   onPressed: () {
-                     onPressed: ()  { Navigator.of(context).pushReplacement(PageRouteBuilder(
-                        pageBuilder: (BuildContext context, _, __) => HomePage()));
-                    //widget.toggleView();},
-                  };
-                  //  widget.toggleView();
+                    onPressed:
+                    () {
+                      Navigator.of(context).pushReplacement(PageRouteBuilder(
+                          pageBuilder: (BuildContext context, _, __) =>
+                              HomePage()));
+                      //widget.toggleView();},
+                    };
+                    //  widget.toggleView();
                   },
                   child: const Text(
                     "Sign Up",
@@ -188,7 +193,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).pushReplacement(PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => SignInPage(toggleView: () {  },)));
+                        pageBuilder: (_, __, ___) => SignInPage(
+                              toggleView: () {},
+                            )));
                   },
                   child: const Text(
                     "Already Have an Account? Sign In!",

@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
 
-      home: WelcomeScreen(), // Use AuthWrapper as the home screen
+      home: WelcomeScreen(),
+      // Use AuthWrapper as the home screen
     );
   }
 }
@@ -82,7 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
                           ..strokeWidth = 7
-                          ..color = Color.fromARGB(255, 0, 107, 194),
+                          ..color = Color.fromARGB(255, 0, 0, 0),
                       ),
                     ),
                     // Add white text
@@ -106,7 +107,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 }
 
 class HomePage extends StatefulWidget {
-  
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -140,31 +140,36 @@ class _HomePageState extends State<HomePage> {
     // Add more shoes as needed
   ];
   Cart cart = Cart();
-  
-  int _selectedIndex = 0;
+
+  int _selectedIndex = 1;
+  Favorites favorites = Favorites();
 
   void _onItemTapped(int index) {
-  setState(() {
-    _selectedIndex = index;
-  });
-  switch (index) {
-    case 0:
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => FavoritesPage()),
-      );
-      break;
-    case 1:
-      Navigator.popUntil(context, (route) => route.isFirst);
-      break;
-    case 2:
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
-      );
-      break;
+    setState(() {
+      _selectedIndex = index;
+    });
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FavoritesPage(favorites: favorites)),
+        );
+        _selectedIndex = 1;
+        break;
+      case 1:
+        Navigator.popUntil(context, (route) => route.isFirst);
+        _selectedIndex = 1;
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage()),
+        );
+        _selectedIndex = 1;
+        break;
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -209,12 +214,10 @@ class _HomePageState extends State<HomePage> {
           childAspectRatio: 0.6,
         ),
         itemBuilder: (BuildContext context, int index) {
-  return ShoeCard(shoe: shoes[index], cart: cart);
-},
-
-    
+          return ShoeCard(shoe: shoes[index], cart: cart, favorites: favorites);
+        },
       ),
-       bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
@@ -235,14 +238,19 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
- 
- 
 }
+
 class ShoeCard extends StatefulWidget {
   final Shoe shoe;
-    final Cart cart;
+  final Cart cart;
+  final Favorites favorites;
 
-  const ShoeCard({Key? key, required this.shoe, required this.cart}) : super(key: key);
+  const ShoeCard(
+      {Key? key,
+      required this.shoe,
+      required this.cart,
+      required this.favorites})
+      : super(key: key);
 
   @override
   _ShoeCardState createState() => _ShoeCardState();
@@ -258,7 +266,8 @@ class _ShoeCardState extends State<ShoeCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ShoeDetailPage(shoe: widget.shoe, cart: widget.cart),
+            builder: (context) =>
+                ShoeDetailPage(shoe: widget.shoe, cart: widget.cart),
           ),
         );
       },
@@ -266,15 +275,18 @@ class _ShoeCardState extends State<ShoeCard> {
         children: [
           Card(
             elevation: 5,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(15)),
                     child: Image.asset(
-                      widget.shoe.imageUrl, // Replace shoes[index] with widget.shoe
+                      widget.shoe
+                          .imageUrl, // Replace shoes[index] with widget.shoe
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -317,6 +329,11 @@ class _ShoeCardState extends State<ShoeCard> {
               onPressed: () {
                 setState(() {
                   _isFavorite = !_isFavorite;
+                  if (_isFavorite) {
+                    widget.favorites.add(widget.shoe);
+                  } else {
+                    widget.favorites.remove(widget.shoe);
+                  }
                 });
               },
             ),
@@ -326,8 +343,6 @@ class _ShoeCardState extends State<ShoeCard> {
     );
   }
 }
-
-
 
 class ShoeSizeDropdown extends StatefulWidget {
   @override
@@ -340,30 +355,50 @@ class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      hint: Text('Select shoe size'),
-      value: _selectedSize,
-      onChanged: (String? newValue) {
-        setState(() {
-          _selectedSize = newValue;
-        });
-      },
-      items: shoeSizes.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.black, width: 2),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          icon: Icon(Icons.arrow_drop_down, color: Colors.black),
+          hint: Text(
+            'Select shoe size',
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
+          value: _selectedSize,
+          onChanged: (String? newValue) {
+            setState(() {
+              _selectedSize = newValue;
+            });
+          },
+          items: shoeSizes.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value,
+                  style: TextStyle(color: Colors.black, fontSize: 16)),
+            );
+          }).toList(),
+          selectedItemBuilder: (BuildContext context) {
+            return shoeSizes.map<Widget>((String value) {
+              return Text(value,
+                  style: TextStyle(color: Colors.black, fontSize: 16));
+            }).toList();
+          },
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          dropdownColor: Colors.white,
+        ),
+      ),
     );
   }
 }
 
-
-
 class ShoeDetailPage extends StatelessWidget {
   final Shoe shoe;
   final Cart cart;
-
 
   ShoeDetailPage({required this.shoe, required this.cart});
 
@@ -400,13 +435,18 @@ class ShoeDetailPage extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(16),
-              child: Text(shoe.description),
+              child: Text(
+                shoe.description,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal, // Make text bold
+                  fontSize: 17, // Increase font size
+                ),
+              ),
             ),
             Padding(
-  padding: EdgeInsets.symmetric(horizontal: 16),
-  child: ShoeSizeDropdown(),
-),
-
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: ShoeSizeDropdown(),
+            ),
             Padding(
               padding: EdgeInsets.all(16),
               child: ElevatedButton(
@@ -447,6 +487,10 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  double getTotalPrice() {
+    return widget.cart.items.fold(0, (sum, item) => sum + item.price);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -494,7 +538,8 @@ class _CartPageState extends State<CartPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PaymentPage(cart: widget.cart),
+                    builder: (context) => PaymentPage(
+                        cart: widget.cart, totalPrice: getTotalPrice()),
                   ),
                 );
               },
@@ -582,7 +627,6 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
-
 //THIS IS FOR FAVORITE PAGE
 class Favorites {
   List<Shoe> favoriteShoes = [];
@@ -595,7 +639,12 @@ class Favorites {
     favoriteShoes.remove(shoe);
   }
 }
+
 class FavoritesPage extends StatefulWidget {
+  final Favorites favorites;
+
+  FavoritesPage({Key? key, required this.favorites}) : super(key: key);
+
   @override
   _FavoritesPageState createState() => _FavoritesPageState();
 }
@@ -605,15 +654,27 @@ class _FavoritesPageState extends State<FavoritesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text('Favorites'),
       ),
-      body: Center(
-        child: Text('Favorites Page'),
+      body: ListView.builder(
+        itemCount: widget.favorites.favoriteShoes.length,
+        itemBuilder: (context, index) {
+          final shoe = widget.favorites.favoriteShoes[index];
+          return ListTile(
+            leading: Image.asset(
+              shoe.imageUrl,
+              height: 50,
+              width: 50,
+            ),
+            title: Text(shoe.name),
+            subtitle: Text('\$${shoe.price.toStringAsFixed(2)}'),
+          );
+        },
       ),
     );
   }
 }
-
 
 //THIS IS PROFILE PAGE
 
@@ -658,6 +719,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   enabled: _isEditing,
                 ),
                 style: TextStyle(fontSize: 18, color: Colors.black),
+                cursorColor: Colors.black,
               ),
               SizedBox(height: 20),
               Text(
@@ -671,6 +733,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   enabled: _isEditing,
                 ),
                 style: TextStyle(fontSize: 18, color: Colors.black),
+                cursorColor: Colors.black,
               ),
               SizedBox(height: 20),
               Text(
@@ -684,6 +747,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   enabled: _isEditing,
                 ),
                 style: TextStyle(fontSize: 18, color: Colors.black),
+                cursorColor: Colors.black,
               ),
               SizedBox(height: 40),
               Row(

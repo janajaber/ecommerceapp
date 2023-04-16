@@ -31,8 +31,8 @@ class ChooseSignInorSignUp extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: SizedBox(
-                        height: 130, child: Image.asset('logo2.png')),
+                    child:
+                        SizedBox(height: 130, child: Image.asset('logo2.png')),
                   ),
                   const Padding(padding: EdgeInsets.only(top: 50.0)),
                 ],
@@ -44,12 +44,14 @@ class ChooseSignInorSignUp extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 100.0, vertical: 10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
-                color: Color.fromARGB(255, 13, 120, 220),
+                color: Colors.black,
               ),
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => SignInPage(toggleView: () {  },)));
+                      pageBuilder: (_, __, ___) => SignInPage(
+                            toggleView: () {},
+                          )));
                 },
                 child: const Text(
                   "Sign In",
@@ -92,12 +94,14 @@ class ChooseSignInorSignUp extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 100.0, vertical: 10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
-                color: const Color.fromARGB(255, 13, 120, 220),
+                color: Colors.black,
               ),
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => SignUpPage(toggleView: () {  },)));
+                      pageBuilder: (_, __, ___) => SignUpPage(
+                            toggleView: () {},
+                          )));
                 },
                 child: const Text(
                   "Sign Up",
