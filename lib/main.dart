@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
       price: 149.99,
     ),
     Shoe(
-      name: 'Cortez to Air Force 1',
+      name: 'Nike Cortez',
       description: 'This is another example shoe with amazing durability.',
       imageUrl: 'im8.jpeg',
       price: 159.99,
