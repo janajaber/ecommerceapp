@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'payment.dart';
-
 import 'choose.dart';
 import 'models.dart';
 
@@ -767,8 +766,27 @@ class _ProfilePageState extends State<ProfilePage> {
                       backgroundColor: MaterialStateProperty.all(Colors.black),
                     ),
                   ),
-                ],
-              ),
+         
+    SizedBox(width: 20), // Add SizedBox for spacing
+    ElevatedButton(
+      onPressed: () {
+        // Add log out functionality here
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChooseSignInorSignUp()),
+        );
+      },
+      child: Text(
+        'Log Out',
+        style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.black),
+      ),
+    ),
+  ],
+),
+
             ],
           ),
         ),
