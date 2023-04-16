@@ -32,7 +32,7 @@ class ChooseSignInorSignUp extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child:
-                        SizedBox(height: 130, child: Image.asset('logo2.png')),
+                        SizedBox(height: 130, child: Image.asset('logo3.png')),
                   ),
                   const Padding(padding: EdgeInsets.only(top: 50.0)),
                 ],

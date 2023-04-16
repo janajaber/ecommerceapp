@@ -63,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('load3.jpg'),
+            image: AssetImage('load4.jpg'),
             fit: BoxFit.cover,
           ),
         ),
