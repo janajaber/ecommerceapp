@@ -128,13 +128,37 @@ class _HomePageState extends State<HomePage> {
       name: 'Cortez to Air Force 1',
       description: 'This is another example shoe with amazing durability.',
       imageUrl: 'im4.jpeg',
-      price: 89.99,
+      price: 120.99,
     ),
     Shoe(
       name: 'Nike Dunk High',
       description: 'This is another example shoe with amazing durability.',
       imageUrl: 'im5.jpeg',
-      price: 89.99,
+      price: 150.99,
+    ),
+    Shoe(
+      name: 'Nike Air Max 270',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im1.jpeg',
+      price: 79.99,
+    ),
+    Shoe(
+      name: 'Nike Air Max 270',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im3.jpeg',
+      price: 59.99,
+    ),
+    Shoe(
+      name: 'Air Force 1',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im7.jpeg',
+      price: 149.99,
+    ),
+    Shoe(
+      name: 'Cortez to Air Force 1',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im8.jpeg',
+      price: 159.99,
     )
     // Add more shoes as needed
   ];
@@ -766,27 +790,27 @@ class _ProfilePageState extends State<ProfilePage> {
                       backgroundColor: MaterialStateProperty.all(Colors.black),
                     ),
                   ),
-         
-    SizedBox(width: 20), // Add SizedBox for spacing
-    ElevatedButton(
-      onPressed: () {
-        // Add log out functionality here
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ChooseSignInorSignUp()),
-        );
-      },
-      child: Text(
-        'Log Out',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.black),
-      ),
-    ),
-  ],
-),
 
+                  SizedBox(width: 20), // Add SizedBox for spacing
+                  ElevatedButton(
+                    onPressed: () {
+                      // Add log out functionality here
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChooseSignInorSignUp()),
+                      );
+                    },
+                    child: Text(
+                      'Log Out',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
