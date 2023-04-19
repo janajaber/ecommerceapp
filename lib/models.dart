@@ -19,6 +19,8 @@ class Cart {
 
   List<Shoe> get items => _items;
 
+  get selectedSize => null;
+
   void addItem(Shoe shoe) {
     _items.add(shoe);
   }
