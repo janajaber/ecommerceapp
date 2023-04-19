@@ -46,7 +46,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => const ChooseSignInorSignUp()));
+             // builder: (BuildContext context) => const ChooseSignInorSignUp()));
+              builder: (BuildContext context) =>  HomePage()));
+
     });
   }
 
@@ -402,13 +404,17 @@ class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value,
-                  style: TextStyle(color: Colors.black, fontSize: 16)),
+                  style: TextStyle(color: Colors.black, fontSize: 20)),
             );
           }).toList(),
           selectedItemBuilder: (BuildContext context) {
             return shoeSizes.map<Widget>((String value) {
-              return Text(value,
-                  style: TextStyle(color: Colors.black, fontSize: 16));
+              return Container( // Add Container widget
+                 padding: EdgeInsets.only(top: 14),
+
+                // Center the text horizontally
+                child: Text(value, style: TextStyle(color: Colors.black, fontSize: 20)),
+              );
             }).toList();
           },
           style: TextStyle(color: Colors.black, fontSize: 16),
