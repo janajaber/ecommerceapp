@@ -28,40 +28,25 @@ class _PaymentPageState extends State<PaymentPage> {
         backgroundColor: Colors.black,
         title: Text('Payment'),
       ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Total Price : \$${widget.totalPrice.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ),
-          Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Visa Card Information',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Icon(
-                    FontAwesomeIcons.ccVisa,
-                    size: 48,
-                    color: Colors.black,
-                  ),
-                  SizedBox(height: 24),
+              body: SingleChildScrollView(
+                child: Padding(
+                  
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 20), 
+                      Text(
+                        'Visa Card Information',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 8),
+                      Icon(
+                        FontAwesomeIcons.ccVisa,
+                        size: 48,
+                        color: Colors.black,
+                      ),
+                      SizedBox(height: 24),
                   TextField(
                     controller: _cardNumberController,
                     keyboardType: TextInputType.number,
@@ -122,7 +107,31 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ),
                   SizedBox(height: 32),
-                  ElevatedButton(
+                  
+
+              Container(
+               margin: EdgeInsets.only(bottom: 20), 
+
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.black, width: 2),
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Total Price:',
+                      style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      '\$${widget.totalPrice.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 28, color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
                     onPressed: () {
                       // Handle payment processing here
                     },
@@ -138,11 +147,10 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
+                  SizedBox(height: 30),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
