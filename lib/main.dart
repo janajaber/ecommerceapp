@@ -1,11 +1,14 @@
 // main.dart
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'payment.dart';
 import 'choose.dart';
 import 'models.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -718,6 +721,22 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _locationController = TextEditingController();
 
   bool _isEditing = false;
+  File? _profileImage;  // Add a variable to store the selected image
+  ImageProvider<Object> getProfileImage() {
+    if (_profileImage == null) {
+      return AssetImage('profile.JPG');
+    } else {
+      return FileImage(_profileImage!);
+    }
+  }
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _profileImage = image as File?;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -732,11 +751,25 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage('profile.JPG'),
+              Center(
+                child: GestureDetector(
+                  onTap: () => _pickImage(),
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: getProfileImage(),
+                  ),
+                ),
               ),
-              SizedBox(height: 40),
+            SizedBox(height: 8),
+            Center(
+              child: Text(
+                'Tap on the image to change',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ),
+              SizedBox(height: 30),
+              // ... Remaining widgets
+               SizedBox(height: 40),
               Text(
                 'Name',
                 style: TextStyle(fontSize: 16, color: Colors.black),
