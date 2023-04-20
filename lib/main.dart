@@ -373,9 +373,13 @@ class _ShoeCardState extends State<ShoeCard> {
 }
 
 class ShoeSizeDropdown extends StatefulWidget {
+  ShoeSizeDropdown({Key? key}) : super(key: key);
+
   @override
   _ShoeSizeDropdownState createState() => _ShoeSizeDropdownState();
 }
+
+
 
 class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
   final List<String> shoeSizes = ['36', '37', '38', '39', '40', '41', '42'];
@@ -412,10 +416,8 @@ class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
           }).toList(),
           selectedItemBuilder: (BuildContext context) {
             return shoeSizes.map<Widget>((String value) {
-              return Container( // Add Container widget
-                 padding: EdgeInsets.only(top: 14),
-
-                // Center the text horizontally
+              return Container(
+                padding: EdgeInsets.only(top: 14),
                 child: Text(value, style: TextStyle(color: Colors.black, fontSize: 20)),
               );
             }).toList();
@@ -431,6 +433,8 @@ class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
 class ShoeDetailPage extends StatelessWidget {
   final Shoe shoe;
   final Cart cart;
+  final GlobalKey<_ShoeSizeDropdownState> _sizeDropdownKey =
+      GlobalKey<_ShoeSizeDropdownState>();
 
   ShoeDetailPage({required this.shoe, required this.cart});
 
@@ -446,7 +450,6 @@ class ShoeDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset(
-              // Replace Image.network with Image.asset
               shoe.imageUrl,
               fit: BoxFit.cover,
               height: 300,
@@ -470,26 +473,67 @@ class ShoeDetailPage extends StatelessWidget {
               child: Text(
                 shoe.description,
                 style: TextStyle(
-                  fontWeight: FontWeight.normal, // Make text bold
-                  fontSize: 17, // Increase font size
+                  fontWeight: FontWeight.normal,
+                  fontSize: 17,
                 ),
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
-              child: ShoeSizeDropdown(),
+              child: ShoeSizeDropdown(key: _sizeDropdownKey),
             ),
             Padding(
               padding: EdgeInsets.all(16),
               child: ElevatedButton(
                 onPressed: () {
-                  cart.addItem(shoe);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Added to cart!'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
+                  if (_sizeDropdownKey.currentState?._selectedSize != null) {
+                    cart.addItem(shoe);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added to cart!'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Warning',
+                            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                          content: Text(
+                            'Please select a shoe size first.',
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          ),
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                'OK',
+                                style: TextStyle(color: Colors.black, fontSize: 18),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  side: BorderSide(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
+                  }
                 },
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.black)),
