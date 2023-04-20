@@ -9,7 +9,6 @@ import 'choose.dart';
 import 'models.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -49,9 +48,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-             // builder: (BuildContext context) => const ChooseSignInorSignUp()));
-              builder: (BuildContext context) =>  HomePage()));
-
+              // builder: (BuildContext context) => const ChooseSignInorSignUp()));
+              builder: (BuildContext context) => HomePage()));
     });
   }
 
@@ -120,51 +118,74 @@ class _HomePageState extends State<HomePage> {
     Shoe(
       name: 'Air Yeezy',
       description: 'This is an example shoe with great comfort and style.',
-      imageUrl: 'im2.jpeg',
+      imageUrl: 'im9_1.jpeg',
+      imageUrls: ['im9_1.jpeg', 'im9.jpeg', 'im9_2.jpeg'],
       price: 59.99,
     ),
     Shoe(
       name: 'Nike Air Presto',
       description: 'This is another example shoe with amazing durability.',
       imageUrl: 'im6.jpeg',
+      imageUrls: ['im6.jpeg', 'im6_1.jpeg', 'im6_2.jpeg'],
       price: 89.99,
-    ),
-    Shoe(
-      name: 'Cortez to Air Force 1',
-      description: 'This is another example shoe with amazing durability.',
-      imageUrl: 'im4.jpeg',
-      price: 120.99,
-    ),
-    Shoe(
-      name: 'Nike Dunk High',
-      description: 'This is another example shoe with amazing durability.',
-      imageUrl: 'im5.jpeg',
-      price: 150.99,
-    ),
-    Shoe(
-      name: 'Nike Air Max 270',
-      description: 'This is another example shoe with amazing durability.',
-      imageUrl: 'im1.jpeg',
-      price: 79.99,
-    ),
-    Shoe(
-      name: 'Nike Air Max 270',
-      description: 'This is another example shoe with amazing durability.',
-      imageUrl: 'im3.jpeg',
-      price: 59.99,
     ),
     Shoe(
       name: 'Air Force 1',
       description: 'This is another example shoe with amazing durability.',
       imageUrl: 'im7.jpeg',
+      imageUrls: ['im7.jpeg', 'im7_1.jpeg', 'im7_2.jpeg'],
       price: 149.99,
     ),
     Shoe(
       name: 'Nike Cortez',
       description: 'This is another example shoe with amazing durability.',
       imageUrl: 'im8.jpeg',
+      imageUrls: ['im8.jpeg', 'im8_1.jpeg', 'im8_2.jpeg'],
       price: 159.99,
-    )
+    ),
+    Shoe(
+      name: 'Cortez to Air Force 1',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im3.jpeg',
+      imageUrls: ['im3.jpeg', 'im3_1.jpeg', 'im3_2.jpeg'],
+      price: 120.99,
+    ),
+    Shoe(
+      name: 'Nike Dunk High',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im5.jpeg',
+      imageUrls: ['im5.jpeg', 'im5_1.jpeg', 'im5_2.jpeg'],
+      price: 150.99,
+    ),
+    Shoe(
+      name: 'Nike Air Max 270',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im4.jpeg',
+      imageUrls: ['im4.jpeg', 'im4_1.jpeg', 'im4_2.jpeg'],
+      price: 79.99,
+    ),
+    Shoe(
+      name: 'Nike Air Max 270',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im2.jpeg',
+      imageUrls: ['im2.jpeg', 'im2_1.jpeg', 'im2_2.jpeg'],
+      price: 59.99,
+    ),
+
+    Shoe(
+      name: 'Cortez to Air Force 1',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im3.jpeg',
+      imageUrls: ['im3.jpeg', 'im3_1.jpeg', 'im3_2.jpeg'],
+      price: 120.99,
+    ),
+    Shoe(
+      name: 'Nike Dunk High',
+      description: 'This is another example shoe with amazing durability.',
+      imageUrl: 'im5.jpeg',
+      imageUrls: ['im5.jpeg', 'im5_1.jpeg', 'im5_2.jpeg'],
+      price: 150.99,
+    ),
     // Add more shoes as needed
   ];
   Cart cart = Cart();
@@ -379,8 +400,6 @@ class ShoeSizeDropdown extends StatefulWidget {
   _ShoeSizeDropdownState createState() => _ShoeSizeDropdownState();
 }
 
-
-
 class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
   final List<String> shoeSizes = ['36', '37', '38', '39', '40', '41', '42'];
   String? _selectedSize;
@@ -418,7 +437,8 @@ class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
             return shoeSizes.map<Widget>((String value) {
               return Container(
                 padding: EdgeInsets.only(top: 14),
-                child: Text(value, style: TextStyle(color: Colors.black, fontSize: 20)),
+                child: Text(value,
+                    style: TextStyle(color: Colors.black, fontSize: 20)),
               );
             }).toList();
           },
@@ -430,48 +450,127 @@ class _ShoeSizeDropdownState extends State<ShoeSizeDropdown> {
   }
 }
 
-class ShoeDetailPage extends StatelessWidget {
+class ShoeDetailPage extends StatefulWidget {
   final Shoe shoe;
   final Cart cart;
-  final GlobalKey<_ShoeSizeDropdownState> _sizeDropdownKey =
-      GlobalKey<_ShoeSizeDropdownState>();
 
   ShoeDetailPage({required this.shoe, required this.cart});
+
+  @override
+  _ShoeDetailPageState createState() => _ShoeDetailPageState();
+}
+
+class _ShoeDetailPageState extends State<ShoeDetailPage> {
+  final GlobalKey<_ShoeSizeDropdownState> _sizeDropdownKey =
+      GlobalKey<_ShoeSizeDropdownState>();
+  late PageController _pageController;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _currentPage);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text(shoe.name),
+        title: Text(widget.shoe.name),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.asset(
-              shoe.imageUrl,
-              fit: BoxFit.cover,
-              height: 300,
+            Stack(
+              children: [
+                Container(
+                  height: 300,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: widget.shoe.imageUrls.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Image.asset(
+                        widget.shoe.imageUrls[index],
+                        fit: BoxFit.cover,
+                        height: 300,
+                      );
+                    },
+                    onPageChanged: (int page) {
+                      setState(() {
+                        _currentPage = page;
+                      });
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 130,
+                  left: 10,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+                    onPressed: () {
+                      if (_currentPage > 0) {
+                        _pageController.previousPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
+                      }
+                      if (_currentPage == 0) {
+                        _pageController.animateToPage(
+                            widget.shoe.imageUrls.length - 1,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease);
+                      }
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 130,
+                  right: 10,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
+                    onPressed: () {
+                      if (_currentPage < widget.shoe.imageUrls.length - 1) {
+                        _pageController.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
+                      }
+                      if (_currentPage == widget.shoe.imageUrls.length - 1) {
+                        _pageController.animateToPage(0,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease);
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                shoe.name,
+                widget.shoe.name,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                '\$${shoe.price.toStringAsFixed(2)}',
+                '\$${widget.shoe.price.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                shoe.description,
+                widget.shoe.description,
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 17,
@@ -487,7 +586,7 @@ class ShoeDetailPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   if (_sizeDropdownKey.currentState?._selectedSize != null) {
-                    cart.addItem(shoe);
+                    widget.cart.addItem(widget.shoe);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Added to cart!'),
@@ -501,7 +600,10 @@ class ShoeDetailPage extends StatelessWidget {
                         return AlertDialog(
                           title: Text(
                             'Warning',
-                            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
                           ),
                           content: Text(
                             'Please select a shoe size first.',
@@ -518,10 +620,12 @@ class ShoeDetailPage extends StatelessWidget {
                               },
                               child: Text(
                                 'OK',
-                                style: TextStyle(color: Colors.black, fontSize: 18),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 18),
                               ),
                               style: TextButton.styleFrom(
-                                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 25, vertical: 10),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                   side: BorderSide(color: Colors.black),
@@ -532,7 +636,6 @@ class ShoeDetailPage extends StatelessWidget {
                         );
                       },
                     );
-
                   }
                 },
                 style: ButtonStyle(
@@ -765,7 +868,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _locationController = TextEditingController();
 
   bool _isEditing = false;
-  File? _profileImage;  // Add a variable to store the selected image
+  File? _profileImage;
   ImageProvider<Object> getProfileImage() {
     if (_profileImage == null) {
       return AssetImage('profile.JPG');
@@ -773,6 +876,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return FileImage(_profileImage!);
     }
   }
+
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -789,114 +893,190 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Colors.black,
         title: Text('Profile'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: GestureDetector(
-                  onTap: () => _pickImage(),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: getProfileImage(),
-                  ),
-                ),
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
               ),
-            SizedBox(height: 8),
-            Center(
-              child: Text(
-                'Tap on the image to change',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: GestureDetector(
+                                onTap: () => _pickImage(),
+                                child: CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: getProfileImage(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Center(
+                              child: Text(
+                                'Tap on the image to change',
+                                style:
+                                    TextStyle(fontSize: 14, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(height: 30),
+                            SizedBox(height: 40),
+                            Text(
+                              'Name',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                            TextField(
+                              controller: _nameController,
+                              decoration: InputDecoration(
+                                hintText: 'John Doe',
+                                enabled: _isEditing,
+                              ),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.black),
+                              cursorColor: Colors.black,
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Email',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                            TextField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                hintText: 'john.doe@example.com',
+                                enabled: _isEditing,
+                              ),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.black),
+                              cursorColor: Colors.black,
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Location',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                            TextField(
+                              controller: _locationController,
+                              decoration: InputDecoration(
+                                hintText: 'San Francisco, CA',
+                                enabled: _isEditing,
+                              ),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.black),
+                              cursorColor: Colors.black,
+                            ),
+                            SizedBox(height: 40),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isEditing = !_isEditing;
+                                    });
+                                  },
+                                  child: Text(
+                                    _isEditing ? 'Save' : 'Edit',
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.black),
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChooseSignInorSignUp()),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Log Out',
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 40),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      color: Colors.black,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Contact Us',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.email, color: Colors.white),
+                              SizedBox(width: 8),
+                              Text(
+                                'Shoe1@hotmail.com',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.phone, color: Colors.white),
+                              SizedBox(width: 8),
+                              Text(
+                                '+961 79175075',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-              SizedBox(height: 30),
-              // ... Remaining widgets
-               SizedBox(height: 40),
-              Text(
-                'Name',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  hintText: 'John Doe',
-                  enabled: _isEditing,
-                ),
-                style: TextStyle(fontSize: 18, color: Colors.black),
-                cursorColor: Colors.black,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Email',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  hintText: 'john.doe@example.com',
-                  enabled: _isEditing,
-                ),
-                style: TextStyle(fontSize: 18, color: Colors.black),
-                cursorColor: Colors.black,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Location',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              TextField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  hintText: 'San Francisco, CA',
-                  enabled: _isEditing,
-                ),
-                style: TextStyle(fontSize: 18, color: Colors.black),
-                cursorColor: Colors.black,
-              ),
-              SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _isEditing = !_isEditing;
-                      });
-                    },
-                    child: Text(
-                      _isEditing ? 'Save' : 'Edit',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black),
-                    ),
-                  ),
-
-                  SizedBox(width: 20), // Add SizedBox for spacing
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add log out functionality here
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChooseSignInorSignUp()),
-                      );
-                    },
-                    child: Text(
-                      'Log Out',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
