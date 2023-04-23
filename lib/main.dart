@@ -48,8 +48,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              // builder: (BuildContext context) => const ChooseSignInorSignUp()));
-              builder: (BuildContext context) => HomePage()));
+              builder: (BuildContext context) => const ChooseSignInorSignUp()));
+      //builder: (BuildContext context) => HomePage()));
     });
   }
 

@@ -18,15 +18,43 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  // final _emailController = TextEditingController();
+  // final _passwordController = TextEditingController();
+
+  // bool _isButtonEnabled = true;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _isButtonEnabled = false;
+  // }
+
+  final _formKey = GlobalKey<FormState>();
+
+  bool _emailError = false;
+  bool _passwordError = false;
+  bool _emptyFieldsError = false;
+
+  String _email = '';
+  String _password = '';
 
   bool _isButtonEnabled = true;
 
-  @override
-  void initState() {
-    super.initState();
-    _isButtonEnabled = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _validateEmail(String email) {
+    // A basic email validation regex
+    final RegExp emailRegex =
+        RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$");
+    return emailRegex.hasMatch(email);
+  }
+
+  bool _validatePassword(String password) {
+    // A basic password validation regex (minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character)
+    final RegExp passwordRegex = RegExp(
+        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+    return passwordRegex.hasMatch(password);
   }
 
   @override
@@ -86,17 +114,45 @@ class _SignInPageState extends State<SignInPage> {
                             width: 2.0,
                           ),
                         ),
-                        child: TextField(
+                        child: TextFormField(
                           controller: _emailController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Email',
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
                           cursorColor: Colors.black,
+                          onChanged: (String value) {
+                            if (value.isEmpty) {
+                              setState(() {
+                                _emailError = false;
+                                _emptyFieldsError = true;
+                              });
+                            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                .hasMatch(value)) {
+                              setState(() {
+                                _emailError = true;
+                                _emptyFieldsError = false;
+                              });
+                            } else {
+                              setState(() {
+                                _emailError = false;
+                                _emptyFieldsError = false;
+                              });
+                            }
+                            _email = value;
+                          },
                         ),
                       ),
                     ),
+                    if (_emailError)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                        child: Text(
+                          'Please enter a valid email address.',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
                     const Padding(padding: EdgeInsets.all(8.0)),
                     const Text(
                       "Password",
@@ -119,7 +175,7 @@ class _SignInPageState extends State<SignInPage> {
                             width: 2.0,
                           ),
                         ),
-                        child: TextField(
+                        child: TextFormField(
                           controller: _passwordController,
                           decoration: const InputDecoration(
                             hintText: 'Password',
@@ -128,9 +184,46 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                           cursorColor: Colors.black,
                           obscureText: true,
+                          onChanged: (String value) {
+                            if (value.isEmpty) {
+                              setState(() {
+                                _passwordError = false;
+                                _emptyFieldsError = true;
+                              });
+                            } else if (!RegExp(
+                                    r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+                                .hasMatch(value)) {
+                              setState(() {
+                                _passwordError = true;
+                                _emptyFieldsError = false;
+                              });
+                            } else {
+                              setState(() {
+                                _passwordError = false;
+                                _emptyFieldsError = false;
+                              });
+                            }
+                            _password = value;
+                          },
                         ),
                       ),
                     ),
+                    if (_passwordError)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                        child: Text(
+                          'Password must have at least 8 characters, 1 letter, and 1 number.',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    if (_emptyFieldsError)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                        child: Text(
+                          'Please fill in both fields.',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -146,10 +239,23 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(PageRouteBuilder(
-                        pageBuilder: (BuildContext context, _, __) =>
-                            HomePage()));
-                    //widget.toggleView();},
+                    // Check if email or password fields are empty
+                    if (_emailController.text.isEmpty ||
+                        _passwordController.text.isEmpty ||
+                        _emailError ||
+                        _passwordError) {
+                      setState(() {
+                        _emptyFieldsError = true;
+                      });
+                    } else {
+                      // If both fields are filled, navigate to the HomePage
+                      Navigator.of(context).pushReplacement(
+                        PageRouteBuilder(
+                          pageBuilder: (BuildContext context, _, __) =>
+                              HomePage(),
+                        ),
+                      );
+                    }
                   },
                   child: const Text(
                     "Sign In",
